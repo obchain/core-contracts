@@ -17,6 +17,7 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@matterlabs/hardhat-zksync-deploy';
 import '@matterlabs/hardhat-zksync-solc';
 
+import { ZERO_ADDRESS } from './helpers/constants';
 import { DEFAULT_NAMED_ACCOUNTS } from '@aave/deploy-v3';
 
 const DEFAULT_BLOCK_GAS_LIMIT = 12450000;
@@ -44,7 +45,49 @@ const hardhatConfig = {
   },
   zksolc: {
     version: '1.3.13',
-    settings: {},
+    settings: {
+      libraries: {
+        'contracts/protocol/libraries/logic/GenericLogic.sol': {
+          GenericLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/BridgeLogic.sol': {
+          BridgeLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/ConfiguratorLogic.sol': {
+          ConfiguratorLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/ReserveLogic.sol': {
+          ReserveLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/PoolLogic.sol': {
+          PoolLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/EModeLogic.sol': {
+          EModeLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/LiquidationLogic.sol': {
+          LiquidationLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/SupplyLogic.sol': {
+          SupplyLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/CalldataLogic.sol': {
+          CalldataLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/ValidationLogic.sol': {
+          ValidationLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/FlashLoanLogic.sol': {
+          FlashLoanLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/IsolationModeLogic.sol': {
+          IsolationModeLogic: ZERO_ADDRESS,
+        },
+        'contracts/protocol/libraries/logic/BorrowLogic.sol': {
+          BorrowLogic: ZERO_ADDRESS,
+        },
+      },
+    },
   },
   typechain: {
     outDir: 'types',
