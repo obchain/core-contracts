@@ -14,6 +14,9 @@ import 'hardhat-contract-sizer';
 import 'hardhat-dependency-compiler';
 import '@nomicfoundation/hardhat-chai-matchers';
 
+import '@matterlabs/hardhat-zksync-deploy';
+import '@matterlabs/hardhat-zksync-solc';
+
 import { DEFAULT_NAMED_ACCOUNTS } from '@aave/deploy-v3';
 
 const DEFAULT_BLOCK_GAS_LIMIT = 12450000;
@@ -30,14 +33,18 @@ const hardhatConfig = {
   },
   solidity: {
     // Docs for the compiler https://docs.soliditylang.org/en/v0.8.10/using-the-compiler.html
-    version: '0.8.10',
+    version: '0.8.12',
     settings: {
       optimizer: {
         enabled: true,
         runs: 100000,
       },
-      evmVersion: 'london',
+      // evmVersion: 'london',
     },
+  },
+  zksolc: {
+    version: '1.3.13',
+    settings: {},
   },
   typechain: {
     outDir: 'types',
@@ -53,17 +60,24 @@ const hardhatConfig = {
     forkNetwork: '1', //Network id of the network we want to fork
   },
   networks: {
+    zkSyncTestnet: {
+      url: 'https://testnet.era.zksync.dev',
+      ethNetwork: 'goerli', // or a Goerli RPC endpoint from Infura/Alchemy/Chainstack etc.
+      zksync: true,
+    },
     coverage: {
       url: 'http://localhost:8555',
       chainId: COVERAGE_CHAINID,
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
+      zksync: false,
     },
     hardhat: {
       hardfork: HARDFORK,
       blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
       gas: DEFAULT_BLOCK_GAS_LIMIT,
       gasPrice: 8000000000,
+      zksync: false,
       chainId: HARDHAT_CHAINID,
       throwOnTransactionFailures: true,
       throwOnCallFailures: true,
@@ -82,18 +96,20 @@ const hardhatConfig = {
         initialIndex: 0,
         count: 20,
       },
+      zksync: false,
     },
   },
+  defaultNetwork: 'zkSyncTestnet',
   namedAccounts: {
     ...DEFAULT_NAMED_ACCOUNTS,
   },
   external: {
-    contracts: [
-      {
-        artifacts: './temp-artifacts',
-        deploy: 'node_modules/@aave/deploy-v3/dist/deploy',
-      },
-    ],
+    // contracts: [
+    //   {
+    //     artifacts: './temp-artifacts',
+    //     deploy: 'node_modules/@aave/deploy-v3/dist/deploy',
+    //   },
+    // ],
   },
 };
 
