@@ -1,13 +1,15 @@
 {
-  "name": "@aave/core-v3",
+  "name": "@zerolendxyz/core-v3",
   "version": "1.19.1",
-  "description": "Aave Protocol V3 core smart contracts",
+  "description": "zerolendxyz Protocol core smart contracts",
   "files": [
     "contracts",
     "artifacts",
+    "artifacts-zk",
     "types",
     "dist"
   ],
+  "private": false,
   "main": "dist/helpers/index.js",
   "engines": {
     "node": ">=16.0.0"
