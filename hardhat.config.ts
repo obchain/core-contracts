@@ -47,44 +47,29 @@ const hardhatConfig = {
     version: '1.3.13',
     settings: {
       libraries: {
-        'contracts/protocol/libraries/logic/GenericLogic.sol': {
-          GenericLogic: ZERO_ADDRESS,
-        },
         'contracts/protocol/libraries/logic/BridgeLogic.sol': {
-          BridgeLogic: ZERO_ADDRESS,
+          BridgeLogic: '0x6CDe8a8cEE9771A30dE4fEAB8eaccb58cb0d30aF',
         },
         'contracts/protocol/libraries/logic/ConfiguratorLogic.sol': {
-          ConfiguratorLogic: ZERO_ADDRESS,
-        },
-        'contracts/protocol/libraries/logic/ReserveLogic.sol': {
-          ReserveLogic: ZERO_ADDRESS,
+          ConfiguratorLogic: '0x8731d4E5b990025143609F4A40eC80Fb482E46A0',
         },
         'contracts/protocol/libraries/logic/PoolLogic.sol': {
-          PoolLogic: ZERO_ADDRESS,
+          PoolLogic: '0xA8D16FB0620E3376093cb89e2cD9dEF9fE47Daaa',
         },
         'contracts/protocol/libraries/logic/EModeLogic.sol': {
-          EModeLogic: ZERO_ADDRESS,
+          EModeLogic: '0xD84E953a621bb9D81Dc998E0b1482D2916153c23',
         },
         'contracts/protocol/libraries/logic/LiquidationLogic.sol': {
-          LiquidationLogic: ZERO_ADDRESS,
+          LiquidationLogic: '0x1962271C81e9734dC201312350a1D19351B7C4Ac',
         },
         'contracts/protocol/libraries/logic/SupplyLogic.sol': {
-          SupplyLogic: ZERO_ADDRESS,
-        },
-        'contracts/protocol/libraries/logic/CalldataLogic.sol': {
-          CalldataLogic: ZERO_ADDRESS,
-        },
-        'contracts/protocol/libraries/logic/ValidationLogic.sol': {
-          ValidationLogic: ZERO_ADDRESS,
+          SupplyLogic: '0x9223dC9205Cf8336CA59bA0bD390647E62D487E5',
         },
         'contracts/protocol/libraries/logic/FlashLoanLogic.sol': {
-          FlashLoanLogic: ZERO_ADDRESS,
-        },
-        'contracts/protocol/libraries/logic/IsolationModeLogic.sol': {
-          IsolationModeLogic: ZERO_ADDRESS,
+          FlashLoanLogic: '0xBD93e7f228d56ACd10182D1C92283809e8521633',
         },
         'contracts/protocol/libraries/logic/BorrowLogic.sol': {
-          BorrowLogic: ZERO_ADDRESS,
+          BorrowLogic: '0x81D6b98Beb0A4288dCFab724FDeaE52E5Aa2F7b1',
         },
       },
     },
