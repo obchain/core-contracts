@@ -4,7 +4,8 @@ pragma solidity 0.8.12;
 import {IERC20} from '../../../dependencies/openzeppelin/contracts/IERC20.sol';
 import {DataTypes} from '../types/DataTypes.sol';
 import {ReserveLogic} from './ReserveLogic.sol';
-import {IBlast} from '../../../interfaces/IBlast.sol';
+import {IBlast, IBlastRebasingERC20} from '../../../interfaces/IBlast.sol';
+import {IBlastAToken} from '../../../interfaces/IBlastAToken.sol';
 
 /**
  * @title BlastLogic library
@@ -29,10 +30,7 @@ library BlastLogic {
 
     reserve.updateState(reserveCache);
 
-    IBlast blast = IBlast(0x4300000000000000000000000000000000000002);
-
-    uint256 blastYield = blast.claimAllYield(
-      reserveCache.aTokenAddress,
+    uint256 blastYield = IBlastAToken(reserveCache.aTokenAddress).claimYield(
       reserveCache.aTokenAddress
     );
 

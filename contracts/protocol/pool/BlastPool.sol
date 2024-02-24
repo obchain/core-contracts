@@ -3,7 +3,8 @@ pragma solidity 0.8.12;
 
 import {Pool, IPoolAddressesProvider, DataTypes} from './Pool.sol';
 import {BlastLogic} from '../libraries/logic/BlastLogic.sol';
-import {IBlast} from '../../interfaces/IBlast.sol';
+import {IBlast, IBlastRebasingERC20} from '../../interfaces/IBlast.sol';
+import {IBlastAToken} from '../../interfaces/IBlastAToken.sol';
 
 contract BlastPool is Pool {
   constructor(IPoolAddressesProvider provider) Pool(provider) {}
@@ -17,6 +18,10 @@ contract BlastPool is Pool {
   function claimGas(address whom, address to) external onlyPoolAdmin {
     IBlast blast = IBlast(0x4300000000000000000000000000000000000002);
     blast.claimAllGas(whom, to);
+  }
+
+  function claimERC20yields(address token, address dest) external onlyPoolAdmin {
+    IBlastAToken(token).claimYield(dest);
   }
 
   function compoundYields(address reserve) external onlyPoolAdmin {
