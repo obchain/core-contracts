@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 library DataTypes {
@@ -79,7 +79,11 @@ library DataTypes {
     string label;
   }
 
-  enum InterestRateMode {NONE, STABLE, VARIABLE}
+  enum InterestRateMode {
+    NONE,
+    STABLE,
+    VARIABLE
+  }
 
   struct ReserveCache {
     uint256 currScaledVariableDebt;
@@ -186,6 +190,7 @@ library DataTypes {
     uint256 maxStableRateBorrowSizePercent;
     uint256 reservesCount;
     address addressesProvider;
+    address pool;
     uint8 userEModeCategory;
     bool isAuthorizedFlashBorrower;
   }
