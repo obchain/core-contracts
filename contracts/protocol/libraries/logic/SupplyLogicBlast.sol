@@ -15,11 +15,11 @@ import {ReserveConfiguration} from '../configuration/ReserveConfiguration.sol';
 import {IBlast} from '../../../interfaces/IBlast.sol';
 
 /**
- * @title SupplyLogic library
+ * @title SupplyLogicBlast library
  * @author Aave
  * @notice Implements the base logic for supply/withdraw
  */
-library SupplyLogic {
+library SupplyLogicBlast {
   using ReserveLogic for DataTypes.ReserveCache;
   using ReserveLogic for DataTypes.ReserveData;
   using GPv2SafeERC20 for IERC20;
