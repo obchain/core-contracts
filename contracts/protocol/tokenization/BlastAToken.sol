@@ -35,13 +35,12 @@ contract BlastAToken is AToken, IBlastAToken {
     blast.configureGovernor(address(initializingPool));
   }
 
-  function claimYield(address to) public virtual override onlyPool returns (uint256) {
+  function claimYield(address to) public virtual override returns (uint256) {
     IACLManager aclManager = IACLManager(_addressesProvider.getACLManager());
     require(aclManager.isPoolAdmin(msg.sender) || _msgSender() == address(POOL), '!user');
 
     IBlastRebasingERC20 erc20 = IBlastRebasingERC20(_underlyingAsset);
     uint256 claimable = erc20.getClaimableAmount(address(this));
-    erc20.claim(to, claimable);
-    return claimable;
+    return erc20.claim(to, claimable);
   }
 }
