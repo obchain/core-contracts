@@ -9,7 +9,7 @@ import {IACLManager} from '../../interfaces/IACLManager.sol';
 contract BlastAToken is AToken, IBlastAToken {
   constructor(IPool pool) AToken(pool) {}
 
-  function initialize(
+  function initBlast(
     IPool initializingPool,
     address treasury,
     address underlyingAsset,
@@ -18,8 +18,8 @@ contract BlastAToken is AToken, IBlastAToken {
     string calldata aTokenName,
     string calldata aTokenSymbol,
     bytes calldata params
-  ) public virtual override {
-    AToken.initialize(
+  ) public virtual {
+    initialize(
       initializingPool,
       treasury,
       underlyingAsset,
