@@ -1,6 +1,6 @@
 {
   "name": "@zerolendxyz/core-v3",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "description": "zerolendxyz Protocol core smart contracts",
   "files": [
     "contracts",
