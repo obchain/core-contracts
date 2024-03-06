@@ -6,34 +6,14 @@ import {IBlast, IBlastRebasingERC20, YieldMode} from '../../interfaces/IBlast.so
 import {IBlastAToken} from '../../interfaces/IBlastAToken.sol';
 import {IACLManager} from '../../interfaces/IACLManager.sol';
 
+interface IBlastPoints {
+  function configurePointsOperator(address operator) external;
+}
+
 contract BlastAToken is AToken, IBlastAToken {
+  uint256 public constant override ATOKEN_REVISION = 0x2;
+
   constructor(IPool pool) AToken(pool) {}
-
-  function initBlast(
-    IPool initializingPool,
-    address treasury,
-    address underlyingAsset,
-    IAaveIncentivesController incentivesController,
-    uint8 aTokenDecimals,
-    string calldata aTokenName,
-    string calldata aTokenSymbol,
-    bytes calldata params
-  ) public virtual {
-    initialize(
-      initializingPool,
-      treasury,
-      underlyingAsset,
-      incentivesController,
-      aTokenDecimals,
-      aTokenName,
-      aTokenSymbol,
-      params
-    );
-
-    IBlast blast = IBlast(0x4300000000000000000000000000000000000002);
-    IBlastRebasingERC20(underlyingAsset).configure(YieldMode.CLAIMABLE);
-    blast.configureGovernor(address(initializingPool));
-  }
 
   function claimYield(address to) public virtual override returns (uint256) {
     IACLManager aclManager = IACLManager(_addressesProvider.getACLManager());
@@ -42,5 +22,15 @@ contract BlastAToken is AToken, IBlastAToken {
     IBlastRebasingERC20 erc20 = IBlastRebasingERC20(_underlyingAsset);
     uint256 claimable = erc20.getClaimableAmount(address(this));
     return erc20.claim(to, claimable);
+  }
+
+  function configureGovernor(address governor) public override onlyPoolAdmin {
+    IBlast blast = IBlast(0x4300000000000000000000000000000000000002);
+    IBlastRebasingERC20(_underlyingAsset).configure(YieldMode.CLAIMABLE);
+    blast.configureGovernor(governor);
+  }
+
+  function configurePointsOperator(address pointsAddr, address who) public override onlyPoolAdmin {
+    IBlastPoints(pointsAddr).configurePointsOperator(who);
   }
 }
