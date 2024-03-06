@@ -11,9 +11,11 @@ interface IBlastPoints {
 }
 
 contract BlastAToken is AToken, IBlastAToken {
-  uint256 public constant override ATOKEN_REVISION = 0x2;
-
   constructor(IPool pool) AToken(pool) {}
+
+  function getRevision() internal pure virtual override returns (uint256) {
+    return 0x2;
+  }
 
   function claimYield(address to) public virtual override returns (uint256) {
     IACLManager aclManager = IACLManager(_addressesProvider.getACLManager());
