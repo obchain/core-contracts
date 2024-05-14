@@ -166,31 +166,31 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
     // Intentionally left blank
   }
 
-  /// @inheritdoc IAToken
-  function permit(
-    address owner,
-    address spender,
-    uint256 value,
-    uint256 deadline,
-    uint8 v,
-    bytes32 r,
-    bytes32 s
-  ) external override {
-    // require(owner != address(0), Errors.ZERO_ADDRESS_NOT_VALID);
-    // //solium-disable-next-line
-    // require(block.timestamp <= deadline, Errors.INVALID_EXPIRATION);
-    // uint256 currentValidNonce = _nonces[owner];
-    // bytes32 digest = keccak256(
-    //   abi.encodePacked(
-    //     '\x19\x01',
-    //     DOMAIN_SEPARATOR(),
-    //     keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, currentValidNonce, deadline))
-    //   )
-    // );
-    // require(owner == ecrecover(digest, v, r, s), Errors.INVALID_SIGNATURE);
-    // _nonces[owner] = currentValidNonce + 1;
-    // _approve(owner, spender, value);
-  }
+  // /// @inheritdoc IAToken
+  // function permit(
+  //   address owner,
+  //   address spender,
+  //   uint256 value,
+  //   uint256 deadline,
+  //   uint8 v,
+  //   bytes32 r,
+  //   bytes32 s
+  // ) external override {
+  //   require(owner != address(0), Errors.ZERO_ADDRESS_NOT_VALID);
+  //   //solium-disable-next-line
+  //   require(block.timestamp <= deadline, Errors.INVALID_EXPIRATION);
+  //   uint256 currentValidNonce = _nonces[owner];
+  //   bytes32 digest = keccak256(
+  //     abi.encodePacked(
+  //       '\x19\x01',
+  //       DOMAIN_SEPARATOR(),
+  //       keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, currentValidNonce, deadline))
+  //     )
+  //   );
+  //   require(owner == ecrecover(digest, v, r, s), Errors.INVALID_SIGNATURE);
+  //   _nonces[owner] = currentValidNonce + 1;
+  //   _approve(owner, spender, value);
+  // }
 
   /**
    * @notice Transfers the aTokens between two users. Validates the transfer
