@@ -18,6 +18,7 @@ import {IAToken} from '../../../interfaces/IAToken.sol';
 import {IStableDebtToken} from '../../../interfaces/IStableDebtToken.sol';
 import {IVariableDebtToken} from '../../../interfaces/IVariableDebtToken.sol';
 import {IPriceOracleGetter} from '../../../interfaces/IPriceOracleGetter.sol';
+import {IExpressRelay} from "../../../interfaces/IExpressRelay.sol";
 
 /**
  * @title LiquidationLogic library
@@ -98,7 +99,8 @@ library LiquidationLogic {
     mapping(uint256 => address) storage reservesList,
     mapping(address => DataTypes.UserConfigurationMap) storage usersConfig,
     mapping(uint8 => DataTypes.EModeCategory) storage eModeCategories,
-    DataTypes.ExecuteLiquidationCallParams memory params
+    DataTypes.ExecuteLiquidationCallParams memory params,
+    address expressRelay
   ) external {
     LiquidationCallLocalVars memory vars;
 
@@ -120,6 +122,12 @@ library LiquidationLogic {
         userEModeCategory: params.userEModeCategory
       })
     );
+
+    bool permissioned = IExpressRelay(payable(expressRelay)).isPermissioned(
+      address(this),
+      abi.encode(params.debtToCover)
+    );
+    require(permissioned, 'invalid liquidation');
 
     (vars.userVariableDebt, vars.userTotalDebt, vars.actualDebtToLiquidate) = _calculateDebt(
       vars.debtReserveCache,
