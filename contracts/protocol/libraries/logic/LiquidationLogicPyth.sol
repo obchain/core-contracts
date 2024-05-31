@@ -18,13 +18,14 @@ import {IAToken} from '../../../interfaces/IAToken.sol';
 import {IStableDebtToken} from '../../../interfaces/IStableDebtToken.sol';
 import {IVariableDebtToken} from '../../../interfaces/IVariableDebtToken.sol';
 import {IPriceOracleGetter} from '../../../interfaces/IPriceOracleGetter.sol';
+import {IExpressRelay} from '../../../interfaces/IExpressRelay.sol';
 
 /**
  * @title LiquidationLogic library
  * @author Aave
  * @notice Implements actions involving management of collateral in the protocol, the main one being the liquidations
  */
-library LiquidationLogic {
+library LiquidationLogicPyth {
   using WadRayMath for uint256;
   using PercentageMath for uint256;
   using ReserveLogic for DataTypes.ReserveCache;
@@ -98,7 +99,8 @@ library LiquidationLogic {
     mapping(uint256 => address) storage reservesList,
     mapping(address => DataTypes.UserConfigurationMap) storage usersConfig,
     mapping(uint8 => DataTypes.EModeCategory) storage eModeCategories,
-    DataTypes.ExecuteLiquidationCallParams memory params
+    DataTypes.ExecuteLiquidationCallParams memory params,
+    address expressRelay
   ) external {
     LiquidationCallLocalVars memory vars;
 
@@ -120,6 +122,16 @@ library LiquidationLogic {
         userEModeCategory: params.userEModeCategory
       })
     );
+
+    // for all liquidations above 0.97 HF, use the PYTH express relay to
+    // perform liquidations
+    if (vars.healthFactor > 97 * 1e16 && expressRelay != address(0)) {
+      bool permissioned = IExpressRelay(payable(expressRelay)).isPermissioned(
+        address(this),
+        abi.encode(params.debtToCover)
+      );
+      require(permissioned, 'invalid liquidation');
+    }
 
     (vars.userVariableDebt, vars.userTotalDebt, vars.actualDebtToLiquidate) = _calculateDebt(
       vars.debtReserveCache,

@@ -9,8 +9,8 @@ import {IBlastAToken} from '../../interfaces/IBlastAToken.sol';
 contract BlastPool is Pool {
   constructor(IPoolAddressesProvider provider) Pool(provider) {}
 
-  function init(IPoolAddressesProvider provider, address expressRepayAddress) external virtual {
-    Pool.initialize(provider, expressRepayAddress);
+  function init(IPoolAddressesProvider provider) external virtual {
+    Pool.initialize(provider);
     IBlast blast = IBlast(0x4300000000000000000000000000000000000002);
     blast.configureClaimableGas();
   }

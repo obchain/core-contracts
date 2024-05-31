@@ -17,8 +17,6 @@ import {IERC20WithPermit} from '../../interfaces/IERC20WithPermit.sol';
 import {IPoolAddressesProvider} from '../../interfaces/IPoolAddressesProvider.sol';
 import {IPool} from '../../interfaces/IPool.sol';
 import {IACLManager} from '../../interfaces/IACLManager.sol';
-import {IExpressRelayFeeReceiver} from "../../interfaces/IExpressRelayFeeReceiver.sol";
-
 import {PoolStorage} from './PoolStorage.sol';
 
 /**
@@ -38,7 +36,7 @@ import {PoolStorage} from './PoolStorage.sol';
  * @dev All admin functions are callable by the PoolConfigurator contract defined also in the
  *   PoolAddressesProvider
  */
-contract Pool is VersionedInitializable, PoolStorage, IPool, IExpressRelayFeeReceiver {
+contract Pool is VersionedInitializable, PoolStorage, IPool {
   using ReserveLogic for DataTypes.ReserveData;
 
   uint256 public constant POOL_REVISION = 0x5;
@@ -107,15 +105,10 @@ contract Pool is VersionedInitializable, PoolStorage, IPool, IExpressRelayFeeRec
    * PoolAddressesProvider of the market.
    * @dev Caching the address of the PoolAddressesProvider in order to reduce gas consumption on subsequent operations
    * @param provider The address of the PoolAddressesProvider
-   * @param expressRelayAddress The address of the ExpressRelay contract
    */
-  function initialize(
-    IPoolAddressesProvider provider,
-    address expressRelayAddress
-  ) public virtual initializer {
+  function initialize(IPoolAddressesProvider provider) public virtual initializer {
     require(provider == ADDRESSES_PROVIDER, Errors.INVALID_ADDRESSES_PROVIDER);
     _maxStableRateBorrowSizePercent = 0.25e4;
-    expressRelay = expressRelayAddress;
   }
 
   /// @inheritdoc IPool
@@ -385,8 +378,7 @@ contract Pool is VersionedInitializable, PoolStorage, IPool, IExpressRelayFeeRec
         priceOracle: ADDRESSES_PROVIDER.getPriceOracle(),
         userEModeCategory: _usersEModeCategory[user],
         priceOracleSentinel: ADDRESSES_PROVIDER.getPriceOracleSentinel()
-      }),
-      expressRelay
+      })
     );
   }
 
@@ -748,14 +740,4 @@ contract Pool is VersionedInitializable, PoolStorage, IPool, IExpressRelayFeeRec
       })
     );
   }
-
-  /**
-   * @notice receiveAuctionProceedings function - receives native token from the express relay
-   * @param permissionKey: permission key that was used for the auction
-   */
-  function receiveAuctionProceedings(bytes calldata permissionKey) external payable {
-    emit PoolReceivedETH(msg.sender, msg.value, permissionKey);
-  }
-
-  receive() external payable {}
 }
