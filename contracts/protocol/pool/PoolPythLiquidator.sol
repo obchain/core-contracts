@@ -42,6 +42,10 @@ contract PoolPythLiquidator is Pool, IExpressRelayFeeReceiver {
     );
   }
 
+  /**
+   * @notice receiveAuctionProceedings function - receives native token from the express relay
+   * @param permissionKey: permission key that was used for the auction
+   */
   function receiveAuctionProceedings(bytes calldata permissionKey) external payable {
     emit PoolReceivedETH(msg.sender, msg.value, permissionKey);
   }
