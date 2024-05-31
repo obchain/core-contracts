@@ -211,6 +211,14 @@ interface IPool {
   event MintedToTreasury(address indexed reserve, uint256 amountMinted);
 
   /**
+   * @dev Emitted when pool receives ETH from liquidation
+   * @param sender Address of the caller
+   * @param amount Amount of the ETH
+   * @param permissionKey permission key that was used for the auction
+   */
+  event PoolReceivedETH(address sender, uint256 amount, bytes permissionKey);
+
+  /**
    * @notice Mints an `amount` of aTokens to the `onBehalfOf`
    * @param asset The address of the underlying asset to mint
    * @param amount The amount to mint
