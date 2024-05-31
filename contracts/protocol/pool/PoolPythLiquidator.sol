@@ -6,8 +6,6 @@ import {LiquidationLogicPyth} from '../libraries/logic/LiquidationLogicPyth.sol'
 import {Pool, IPoolAddressesProvider, DataTypes} from './Pool.sol';
 
 contract PoolPythLiquidator is Pool, IExpressRelayFeeReceiver {
-  uint256 public constant override POOL_REVISION = 0x6;
-
   constructor(IPoolAddressesProvider provider) Pool(provider) {}
 
   function init(IPoolAddressesProvider provider, address expressRelayAddress) external virtual {
