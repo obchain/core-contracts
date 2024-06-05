@@ -28,7 +28,7 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
   bytes32 public constant PERMIT_TYPEHASH =
     keccak256('Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)');
 
-  uint256 public constant ATOKEN_REVISION = 0x2;
+  uint256 public constant ATOKEN_REVISION = 0x3;
 
   address internal _treasury;
   address internal _underlyingAsset;
@@ -252,6 +252,10 @@ contract AToken is VersionedInitializable, ScaledBalanceTokenBase, EIP712Base, I
   function rescueTokens(address token, address to, uint256 amount) external override onlyPoolAdmin {
     require(token != _underlyingAsset, Errors.UNDERLYING_CANNOT_BE_RESCUED);
     IERC20(token).safeTransfer(to, amount);
+  }
+
+  function setTreasury(address __treasury) external onlyPoolAdmin {
+    _treasury = __treasury;
   }
 
   function recall(address from, address to, uint256 amount) external onlyPoolAdmin {
