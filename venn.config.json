@@ -1,0 +1,11 @@
+{
+    "network": {
+        "network-name": {
+            "contracts": {
+                "contract-name1":"ADDRESS",
+                "contract-name2":"ADDRESS"
+
+            }
+        }
+    }
+}
