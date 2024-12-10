@@ -1,18 +1,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.12;
-
-import {VennFirewallConsumer} from '@ironblocks/firewall-consumer/contracts/consumers/VennFirewallConsumer.sol';
 import {IExpressRelayFeeReceiver} from '../../interfaces/IExpressRelayFeeReceiver.sol';
 import {LiquidationLogicPyth} from '../libraries/logic/LiquidationLogicPyth.sol';
 import {Pool, IPoolAddressesProvider, DataTypes} from './Pool.sol';
 
-contract PoolPythLiquidator is VennFirewallConsumer, Pool, IExpressRelayFeeReceiver {
+contract PoolPythLiquidator is Pool, IExpressRelayFeeReceiver {
   constructor(IPoolAddressesProvider provider) Pool(provider) {}
 
-  function init(
-    IPoolAddressesProvider provider,
-    address expressRelayAddress
-  ) external virtual firewallProtected {
+  function init(IPoolAddressesProvider provider, address expressRelayAddress) external virtual {
     Pool.initialize(provider);
     expressRelay = expressRelayAddress;
   }
@@ -23,7 +18,7 @@ contract PoolPythLiquidator is VennFirewallConsumer, Pool, IExpressRelayFeeRecei
     address user,
     uint256 debtToCover,
     bool receiveAToken
-  ) public virtual override firewallProtected {
+  ) public virtual override {
     LiquidationLogicPyth.executeLiquidationCall(
       _reserves,
       _reservesList,
@@ -48,9 +43,7 @@ contract PoolPythLiquidator is VennFirewallConsumer, Pool, IExpressRelayFeeRecei
    * @notice receiveAuctionProceedings function - receives native token from the express relay
    * @param permissionKey: permission key that was used for the auction
    */
-  function receiveAuctionProceedings(
-    bytes calldata permissionKey
-  ) external payable firewallProtected {
+  function receiveAuctionProceedings(bytes calldata permissionKey) external payable {
     emit PoolReceivedETH(msg.sender, msg.value, permissionKey);
   }
 

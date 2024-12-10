@@ -23,7 +23,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function supply(bytes32 args) external override firewallProtected {
+  function supply(bytes32 args) external override {
     (address asset, uint256 amount, uint16 referralCode) = CalldataLogic.decodeSupplyParams(
       _reservesList,
       args
@@ -33,27 +33,15 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function supplyWithPermit(
-    bytes32 args,
-    bytes32 r,
-    bytes32 s
-  ) external override firewallProtected {
+  function supplyWithPermit(bytes32 args, bytes32 r, bytes32 s) external override {
     (address asset, uint256 amount, uint16 referralCode, uint256 deadline, uint8 v) = CalldataLogic
       .decodeSupplyWithPermitParams(_reservesList, args);
-    SupplyWithPermitInput memory inputs;
-    inputs.asset = asset;
-    inputs.amount = amount;
-    inputs.onBehalfOf = msg.sender;
-    inputs.referralCode = referralCode;
-    inputs.deadline = deadline;
-    inputs.permitV = v;
-    inputs.permitR = r;
-    inputs.permitS = s;
-    supplyWithPermit(inputs);
+
+    supplyWithPermit(asset, amount, msg.sender, referralCode, deadline, v, r, s);
   }
 
   /// @inheritdoc IL2Pool
-  function withdraw(bytes32 args) external override firewallProtected returns (uint256) {
+  function withdraw(bytes32 args) external override returns (uint256) {
     (address asset, uint256 amount) = CalldataLogic.decodeWithdrawParams(_reservesList, args);
 
     return withdraw(asset, amount, msg.sender);
@@ -68,7 +56,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function repay(bytes32 args) external override firewallProtected returns (uint256) {
+  function repay(bytes32 args) external override returns (uint256) {
     (address asset, uint256 amount, uint256 interestRateMode) = CalldataLogic.decodeRepayParams(
       _reservesList,
       args
@@ -87,21 +75,11 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
       uint8 v
     ) = CalldataLogic.decodeRepayWithPermitParams(_reservesList, args);
 
-    RepayWithPermitInput memory inputs;
-    inputs.asset = asset;
-    inputs.amount = amount;
-    inputs.interestRateMode = interestRateMode;
-    inputs.onBehalfOf = msg.sender;
-    inputs.deadline = deadline;
-    inputs.permitV = v;
-    inputs.permitR = r;
-    inputs.permitS = s;
-
-    return repayWithPermit(inputs);
+    return repayWithPermit(asset, amount, interestRateMode, msg.sender, deadline, v, r, s);
   }
 
   /// @inheritdoc IL2Pool
-  function repayWithATokens(bytes32 args) external override firewallProtected returns (uint256) {
+  function repayWithATokens(bytes32 args) external override returns (uint256) {
     (address asset, uint256 amount, uint256 interestRateMode) = CalldataLogic.decodeRepayParams(
       _reservesList,
       args
@@ -111,7 +89,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function swapBorrowRateMode(bytes32 args) external override firewallProtected {
+  function swapBorrowRateMode(bytes32 args) external override {
     (address asset, uint256 interestRateMode) = CalldataLogic.decodeSwapBorrowRateModeParams(
       _reservesList,
       args
@@ -120,7 +98,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function rebalanceStableBorrowRate(bytes32 args) external override firewallProtected {
+  function rebalanceStableBorrowRate(bytes32 args) external override {
     (address asset, address user) = CalldataLogic.decodeRebalanceStableBorrowRateParams(
       _reservesList,
       args
@@ -129,7 +107,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function setUserUseReserveAsCollateral(bytes32 args) external override firewallProtected {
+  function setUserUseReserveAsCollateral(bytes32 args) external override {
     (address asset, bool useAsCollateral) = CalldataLogic.decodeSetUserUseReserveAsCollateralParams(
       _reservesList,
       args
@@ -138,7 +116,7 @@ contract L2Pool is VennFirewallConsumer, Pool, IL2Pool {
   }
 
   /// @inheritdoc IL2Pool
-  function liquidationCall(bytes32 args1, bytes32 args2) external override firewallProtected {
+  function liquidationCall(bytes32 args1, bytes32 args2) external override {
     (
       address collateralAsset,
       address debtAsset,

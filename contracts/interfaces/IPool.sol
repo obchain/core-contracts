@@ -11,48 +11,6 @@ import {DataTypes} from '../protocol/libraries/types/DataTypes.sol';
  */
 interface IPool {
   /**
-   * @notice Parameters for supplying assets with a permit signature.
-   * @param asset The address of the underlying asset to supply.
-   * @param amount The amount to be supplied.
-   * @param onBehalfOf The address receiving the aTokens. Use the caller's address for self-receipt or another address for a third-party.
-   * @param referralCode Code used to register the integrator for rewards. Use 0 for direct user operations.
-   * @param deadline The timestamp by which the permit signature is valid.
-   * @param permitV The V parameter of the EIP-712 permit signature.
-   * @param permitR The R parameter of the EIP-712 permit signature.
-   * @param permitS The S parameter of the EIP-712 permit signature.
-   */
-  struct SupplyWithPermitInput {
-    address asset;
-    uint256 amount;
-    address onBehalfOf;
-    uint16 referralCode;
-    uint256 deadline;
-    uint8 permitV;
-    bytes32 permitR;
-    bytes32 permitS;
-  }
-  /**
-   * @notice Parameters for repaying assets with a permit signature.
-   * @param asset The address of the borrowed asset to repay.
-   * @param amount The amount to repay. Use type(uint256).max to repay the entire debt.
-   * @param interestRateMode The interest rate mode of the debt. Use 1 for stable or 2 for variable.
-   * @param onBehalfOf The address whose debt will be reduced. Use the caller's address for self-repayment or another address for third-party repayment.
-   * @param deadline The timestamp by which the permit signature is valid.
-   * @param permitV The V parameter of the EIP-712 permit signature.
-   * @param permitR The R parameter of the EIP-712 permit signature.
-   * @param permitS The S parameter of the EIP-712 permit signature.
-   */
-  struct RepayWithPermitInput {
-    address asset;
-    uint256 amount;
-    uint256 interestRateMode;
-    address onBehalfOf;
-    uint256 deadline;
-    uint8 permitV;
-    bytes32 permitR;
-    bytes32 permitS;
-  }
-  /**
    * @dev Emitted on mintUnbacked()
    * @param reserve The address of the underlying asset of the reserve
    * @param user The address initiating the supply
@@ -298,20 +256,30 @@ interface IPool {
   function supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
 
   /**
-   * @notice Supplies assets to the protocol using a permit signature for transfer approval.
-   * @dev This function leverages EIP-2612 and EIP-712 standards to approve and transfer the asset in one transaction.
-   * @param inputs Struct containing:
-   *  - asset: The address of the underlying asset to supply.
-   *  - amount: The amount to be supplied.
-   *  - onBehalfOf: The address receiving the aTokens. Use the caller's address if receiving the aTokens yourself,
-   *    or another address for a third-party beneficiary.
-   *  - referralCode: Code used to register the integrator for potential rewards. Use 0 for direct user operations.
-   *  - deadline: The timestamp by which the permit signature is valid.
-   *  - permitV: The V parameter of the EIP-712 permit signature.
-   *  - permitR: The R parameter of the EIP-712 permit signature.
-   *  - permitS: The S parameter of the EIP-712 permit signature.
+   * @notice Supply with transfer approval of asset to be supplied done via permit function
+   * see: https://eips.ethereum.org/EIPS/eip-2612 and https://eips.ethereum.org/EIPS/eip-713
+   * @param asset The address of the underlying asset to supply
+   * @param amount The amount to be supplied
+   * @param onBehalfOf The address that will receive the aTokens, same as msg.sender if the user
+   *   wants to receive them on his own wallet, or a different address if the beneficiary of aTokens
+   *   is a different wallet
+   * @param deadline The deadline timestamp that the permit is valid
+   * @param referralCode Code used to register the integrator originating the operation, for potential rewards.
+   *   0 if the action is executed directly by the user, without any middle-man
+   * @param permitV The V parameter of ERC712 permit sig
+   * @param permitR The R parameter of ERC712 permit sig
+   * @param permitS The S parameter of ERC712 permit sig
    */
-  function supplyWithPermit(SupplyWithPermitInput memory inputs) external;
+  function supplyWithPermit(
+    address asset,
+    uint256 amount,
+    address onBehalfOf,
+    uint16 referralCode,
+    uint256 deadline,
+    uint8 permitV,
+    bytes32 permitR,
+    bytes32 permitS
+  ) external;
 
   /**
    * @notice Withdraws an `amount` of underlying asset from the reserve, burning the equivalent aTokens owned
@@ -369,21 +337,31 @@ interface IPool {
   ) external returns (uint256);
 
   /**
-   * @notice Repays a borrowed asset using a permit signature for transfer approval.
-   * @dev This function leverages EIP-2612 and EIP-712 standards to approve and transfer the asset in one transaction.
-   * @param inputs Struct containing:
-   *  - asset: The address of the borrowed asset to repay.
-   *  - amount: The amount to repay. Use type(uint256).max to repay the full debt for the given asset.
-   *  - interestRateMode: The interest rate mode of the debt to repay. Use 1 for stable or 2 for variable.
-   *  - onBehalfOf: The address whose debt will be reduced or removed. Use the caller's address for your own debt
-   *    or another address for third-party debt repayment.
-   *  - deadline: The timestamp by which the permit signature is valid.
-   *  - permitV: The V parameter of the EIP-712 permit signature.
-   *  - permitR: The R parameter of the EIP-712 permit signature.
-   *  - permitS: The S parameter of the EIP-712 permit signature.
-   * @return The final amount repaid.
+   * @notice Repay with transfer approval of asset to be repaid done via permit function
+   * see: https://eips.ethereum.org/EIPS/eip-2612 and https://eips.ethereum.org/EIPS/eip-713
+   * @param asset The address of the borrowed underlying asset previously borrowed
+   * @param amount The amount to repay
+   * - Send the value type(uint256).max in order to repay the whole debt for `asset` on the specific `debtMode`
+   * @param interestRateMode The interest rate mode at of the debt the user wants to repay: 1 for Stable, 2 for Variable
+   * @param onBehalfOf Address of the user who will get his debt reduced/removed. Should be the address of the
+   * user calling the function if he wants to reduce/remove his own debt, or the address of any other
+   * other borrower whose debt should be removed
+   * @param deadline The deadline timestamp that the permit is valid
+   * @param permitV The V parameter of ERC712 permit sig
+   * @param permitR The R parameter of ERC712 permit sig
+   * @param permitS The S parameter of ERC712 permit sig
+   * @return The final amount repaid
    */
-  function repayWithPermit(RepayWithPermitInput memory inputs) external returns (uint256);
+  function repayWithPermit(
+    address asset,
+    uint256 amount,
+    uint256 interestRateMode,
+    address onBehalfOf,
+    uint256 deadline,
+    uint8 permitV,
+    bytes32 permitR,
+    bytes32 permitS
+  ) external returns (uint256);
 
   /**
    * @notice Repays a borrowed `amount` on a specific reserve using the reserve aTokens, burning the
