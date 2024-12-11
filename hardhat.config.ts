@@ -30,15 +30,26 @@ const hardhatConfig = {
     disambiguatePaths: false,
   },
   solidity: {
-    // Docs for the compiler https://docs.soliditylang.org/en/v0.8.10/using-the-compiler.html
-    version: '0.8.12',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 100000,
+    compilers: [
+      {
+        version: '0.8.21',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 100000,
+          },
+        },
       },
-      // evmVersion: 'london',
-    },
+      {
+        version: '0.8.12',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 100000,
+          },
+        },
+      },
+    ],
   },
   typechain: {
     outDir: 'types',
