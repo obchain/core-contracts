@@ -1,23 +1,22 @@
-// SPDX-License-Identifier: GPL-3.0
-
-// ███╗   ███╗ █████╗ ██╗  ██╗ █████╗
-// ████╗ ████║██╔══██╗██║  ██║██╔══██╗
-// ██╔████╔██║███████║███████║███████║
-// ██║╚██╔╝██║██╔══██║██╔══██║██╔══██║
-// ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██║
-// ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-
-// Website: https://maha.xyz
-// Discord: https://discord.gg/mahadao
-// Twitter: https://twitter.com/mahaxyz_
-
+// SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.8.21;
+
+// ███████╗███████╗██████╗  ██████╗
+// ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗
+//   ███╔╝ █████╗  ██████╔╝██║   ██║
+//  ███╔╝  ██╔══╝  ██╔══██╗██║   ██║
+// ███████╗███████╗██║  ██║╚██████╔╝
+// ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝
+
+// Website: https://zerolend.xyz
+// Discord: https://discord.gg/zerolend
+// Twitter: https://twitter.com/zerolendxyz
 
 import {IERC20Upgradeable} from '@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol';
 
 /**
  * @title IMultiTokenRewards
- * @author maha.xyz
+ * @author zerolend.xyz
  * @notice This interface is used to interact with a staking contract that gives multiple rewards
  */
 interface IMultiTokenRewards {

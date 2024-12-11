@@ -19,7 +19,7 @@ import {ILocker} from './ILocker.sol';
 
 /**
  * @title OmnichainStaking interface
- * @author maha.xyz
+ * @author zerolend.xyz
  * @notice An omni-chain staking contract that allows users to stake their veNFT and get some
  * voting power. Once staked the voting power is available cross-chain.
  */

@@ -1,15 +1,16 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: AGPL-3.0-or-later
+pragma solidity 0.8.21;
 
-// ███╗   ███╗ █████╗ ██╗  ██╗ █████╗
-// ████╗ ████║██╔══██╗██║  ██║██╔══██╗
-// ██╔████╔██║███████║███████║███████║
-// ██║╚██╔╝██║██╔══██║██╔══██║██╔══██║
-// ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██║
-// ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+// ███████╗███████╗██████╗  ██████╗
+// ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗
+//   ███╔╝ █████╗  ██████╔╝██║   ██║
+//  ███╔╝  ██╔══╝  ██╔══██╗██║   ██║
+// ███████╗███████╗██║  ██║╚██████╔╝
+// ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝
 
-// Website: https://maha.xyz
-// Discord: https://discord.gg/mahadao
-// Twitter: https://twitter.com/mahaxyz_
+// Website: https://zerolend.xyz
+// Discord: https://discord.gg/zerolend
+// Twitter: https://twitter.com/zerolendxyz
 
 pragma solidity 0.8.21;
 
@@ -18,7 +19,7 @@ import {IMultiTokenRewards} from './IMultiTokenRewards.sol';
 
 /**
  * @title IMultiStakingRewardsERC4626
- * @author maha.xyz
+ * @author zerolend.xyz
  * @notice This interface is used to interact with the MultiStakingRewardsERC4626 contract
  */
 interface IMultiStakingRewardsERC4626 is IMultiTokenRewards {

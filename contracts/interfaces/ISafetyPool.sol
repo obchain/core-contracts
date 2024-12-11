@@ -1,20 +1,25 @@
-// SPDX-License-Identifier: GPL-3.0
-
-// ███╗   ███╗ █████╗ ██╗  ██╗ █████╗
-// ████╗ ████║██╔══██╗██║  ██║██╔══██╗
-// ██╔████╔██║███████║███████║███████║
-// ██║╚██╔╝██║██╔══██║██╔══██║██╔══██║
-// ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██║
-// ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
-
-// Website: https://maha.xyz
-// Discord: https://discord.gg/mahadao
-// Twitter: https://twitter.com/mahaxyz_
-
+// SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.8.21;
 
+// ███████╗███████╗██████╗  ██████╗
+// ╚══███╔╝██╔════╝██╔══██╗██╔═══██╗
+//   ███╔╝ █████╗  ██████╔╝██║   ██║
+//  ███╔╝  ██╔══╝  ██╔══██╗██║   ██║
+// ███████╗███████╗██║  ██║╚██████╔╝
+// ╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝
+
+// Website: https://zerolend.xyz
+// Discord: https://discord.gg/zerolend
+// Twitter: https://twitter.com/zerolendxyz
+
+/**
+ * @title Safety Pool
+ * @author zerolend.xyz
+ * @notice This is the main contract responsible for paying for bad debt.
+ */
 interface ISafetyPool {
   event BadDebtCovered(uint256 indexed amount, address indexed caller);
+  event WithdrawalQueueUpdated(uint256 indexed amt, uint256 indexed unlockTime, address indexed caller);
 
   function coverBadDebt(uint256 amount) external;
 
