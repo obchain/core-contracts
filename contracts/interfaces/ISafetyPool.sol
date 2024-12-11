@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.21;
 
 // ███████╗███████╗██████╗  ██████╗
@@ -19,7 +19,11 @@ pragma solidity 0.8.21;
  */
 interface ISafetyPool {
   event BadDebtCovered(uint256 indexed amount, address indexed caller);
-  event WithdrawalQueueUpdated(uint256 indexed amt, uint256 indexed unlockTime, address indexed caller);
+  event WithdrawalQueueUpdated(
+    uint256 indexed amt,
+    uint256 indexed unlockTime,
+    address indexed caller
+  );
 
   function coverBadDebt(uint256 amount) external;
 
