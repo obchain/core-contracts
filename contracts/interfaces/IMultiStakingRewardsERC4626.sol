@@ -12,8 +12,6 @@ pragma solidity 0.8.21;
 // Discord: https://discord.gg/zerolend
 // Twitter: https://twitter.com/zerolendxyz
 
-pragma solidity 0.8.21;
-
 import {IOmnichainStaking} from './IOmnichainStaking.sol';
 import {IMultiTokenRewards} from './IMultiTokenRewards.sol';
 
