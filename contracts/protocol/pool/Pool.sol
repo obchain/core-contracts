@@ -28,9 +28,7 @@ import {PoolStorage} from './PoolStorage.sol';
  *   # Withdraw
  *   # Borrow
  *   # Repay
- *   # Swap their loans between variable and stable rate
- *   # Enable/disable their supplied assets as collateral rebalance stable rate borrow positions
- *   # Liquidate positions
+ *   # Enable/disable their supplied assets as collateral
  *   # Execute Flash Loans
  * @dev To be covered by a proxy contract, owned by the PoolAddressesProvider of the specific market
  * @dev All admin functions are callable by the PoolConfigurator contract defined also in the
@@ -666,21 +664,66 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
     _flashLoanPremiumToProtocol = flashLoanPremiumToProtocol;
   }
 
-  /// @inheritdoc IPool
   function configureEModeCategory(
     uint8 id,
-    DataTypes.EModeCategory memory category
+    DataTypes.EModeCategoryBaseConfiguration memory category
   ) external virtual override onlyPoolConfigurator {
     // category 0 is reserved for volatile heterogeneous assets and it's always disabled
     require(id != 0, Errors.EMODE_CATEGORY_RESERVED);
-    _eModeCategories[id] = category;
+    _eModeCategories[id].ltv = category.ltv;
+    _eModeCategories[id].liquidationThreshold = category.liquidationThreshold;
+    _eModeCategories[id].liquidationBonus = category.liquidationBonus;
+    _eModeCategories[id].label = category.label;
   }
 
   /// @inheritdoc IPool
-  function getEModeCategoryData(
-    uint8 id
-  ) external view virtual override returns (DataTypes.EModeCategory memory) {
-    return _eModeCategories[id];
+  function configureEModeCategoryCollateralBitmap(
+    uint8 id,
+    uint128 collateralBitmap
+  ) external virtual override onlyPoolConfigurator {
+    // category 0 is reserved for volatile heterogeneous assets and it's always disabled
+    require(id != 0, Errors.EMODE_CATEGORY_RESERVED);
+    _eModeCategories[id].collateralBitmap = collateralBitmap;
+  }
+
+  /// @inheritdoc IPool
+  function configureEModeCategoryBorrowableBitmap(
+    uint8 id,
+    uint128 borrowableBitmap
+  ) external virtual override onlyPoolConfigurator {
+    // category 0 is reserved for volatile heterogeneous assets and it's always disabled
+    require(id != 0, Errors.EMODE_CATEGORY_RESERVED);
+    _eModeCategories[id].borrowableBitmap = borrowableBitmap;
+  }
+
+  /// @inheritdoc IPool
+  // function getEModeCategoryData(
+  //   uint8 id
+  // ) external view virtual override returns (DataTypes.EModeCategory memory) {
+  //   DataTypes.EModeCategory memory category = _eModeCategories[id];
+  //   return
+  //     DataTypes.EModeCategory({
+  //       ltv: category.ltv,
+  //       liquidationThreshold: category.liquidationThreshold,
+  //       liquidationBonus: category.liquidationBonus,
+  //       priceSource: address(0),
+  //       label: category.label
+  //     });
+  // }
+
+  /// @inheritdoc IPool
+  function getEModeCategoryLabel(uint8 id) external view returns (string memory) {
+    return _eModeCategories[id].label;
+  }
+
+  /// @inheritdoc IPool
+  function getEModeCategoryCollateralBitmap(uint8 id) external view returns (uint128) {
+    return _eModeCategories[id].collateralBitmap;
+  }
+
+  /// @inheritdoc IPool
+  function getEModeCategoryBorrowableBitmap(uint8 id) external view returns (uint128) {
+    return _eModeCategories[id].borrowableBitmap;
   }
 
   /// @inheritdoc IPool
@@ -697,6 +740,18 @@ contract Pool is VersionedInitializable, PoolStorage, IPool {
         categoryId: categoryId
       })
     );
+  }
+
+  /// @inheritdoc IPool
+  function getEModeCategoryCollateralConfig(
+    uint8 id
+  ) external view returns (DataTypes.CollateralConfig memory) {
+    return
+      DataTypes.CollateralConfig({
+        ltv: _eModeCategories[id].ltv,
+        liquidationThreshold: _eModeCategories[id].liquidationThreshold,
+        liquidationBonus: _eModeCategories[id].liquidationBonus
+      });
   }
 
   /// @inheritdoc IPool
